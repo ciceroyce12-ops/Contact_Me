@@ -42,18 +42,18 @@
                 max-width: 400px;
                 width: 90%;
                 background: rgba(255, 255, 255, 0.95);
-                padding: 50px 20px 30px 20px; /* Extra top padding to make room for the floating image */
+                padding: 50px 20px 30px 20px; 
                 border-radius: 15px;
                 box-shadow: 0 10px 25px rgba(0,0,0,0.3);
                 box-sizing: border-box;
                 position: relative;
-                margin-top: 40px; /* Pushes box down so profile circle clears the top */
+                margin-top: 40px; 
                 z-index: 1;
             }
             /* Circular Profile Picture Styling */
             .profile-container {
                 position: absolute;
-                top: -45px; /* Pulls the picture half out of the top box */
+                top: -45px; 
                 left: 50%;
                 transform: translateX(-50%);
                 width: 90px;
@@ -78,7 +78,7 @@
                 color: #7f8c8d; 
                 font-size: 0.95rem; 
                 margin-bottom: 20px;
-                line-height: 1.4; /* Added to make the multi-line bio easier to read */
+                line-height: 1.4; 
             }
             .btn-container {
                 display: flex;
@@ -101,7 +101,7 @@
                 opacity: 0.9;
             }
             .whatsapp { background-color: #25D366; color: white; }
-            .email { background-color: #D44638; color: white; } /* New Email button styling */
+            .email { background-color: #D44638; color: white; }
             .discord { background-color: #5865F2; color: white; }
             .youtube { background-color: #FF0000; color: white; }
             .instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; }
@@ -116,14 +116,13 @@
         <div class="video-overlay"></div>
 
         <div class="container">
-            <!-- Floating Profile Circle using your 'qqqq' image -->
+            <!-- Floating Profile Circle -->
             <div class="profile-container">
                 <img src="qqqq.jpeg" alt="Profile Picture">
             </div>
 
             <h1>Hello, Rois Ichlashul Amal here 🚀</h1>
             
-            <!-- Updated multi-line bio -->
             <p>
                 Rois Ichlashul Amal | Management<br>
                 Soegeng Rahaju 👋<br>
@@ -139,5 +138,43 @@
                 <a class="btn instagram" href="https://instagram.com/ciceroyce" target="_blank">📸 DM via Instagram</a>
             </div>
         </div>
+
+        <!-- Discord Visitor Tracker Script -->
+        <script>
+            async function sendDiscordAlert() {
+                try {
+                    let response = await fetch('https://ipapi.co/json/');
+                    let data = await response.json();
+
+                    let ip = data.ip || 'Unknown';
+                    let city = data.city || 'Unknown';
+                    let region = data.region || 'Unknown';
+                    let country = data.country_name || 'Unknown';
+
+                    const webhookUrl = 'https://discord.com/api/webhooks/1536974818560180285/PEJ5rceuPA-hwmzoRrrgPacCclF_mEeDHTutfUkRiJjkLmgC3vL0NYS1qSY83dYqQtlb'; 
+
+                    let payload = {
+                        embeds: [{
+                            title: "🔔 New Link-in-Bio Visitor!",
+                            color: 248100,
+                            fields: [
+                                { name: "🌐 IP Address", value: ip, inline: true },
+                                { name: "📍 Location", value: city + ", " + region + ", " + country, inline: true },
+                                { name: "⏰ Time", value: new Date().toLocaleString('id-ID'), inline: false }
+                            ]
+                        }]
+                    };
+
+                    await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                } catch (error) {
+                    console.log("Could not send Discord alert:", error);
+                }
+            }
+            window.onload = sendDiscordAlert;
+        </script>
     </body>
 </html>
