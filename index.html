@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
     <head>
         <title>@ciceroyce</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,6 @@
                 position: relative;
                 overflow: hidden;
             }
-            /* Fixed background video styling for perfect mobile coverage */
             .bg-video {
                 position: absolute;
                 top: 50%;
@@ -50,7 +49,6 @@
                 margin-top: 40px; 
                 z-index: 1;
             }
-            /* Circular Profile Picture Styling */
             .profile-container {
                 position: absolute;
                 top: -45px; 
@@ -64,27 +62,10 @@
                 box-shadow: 0 4px 10px rgba(0,0,0,0.2);
                 background: white;
             }
-            .profile-container img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-            h1 { 
-                color: #2c3e50; 
-                margin-bottom: 5px; 
-                font-size: 1.5rem; 
-            }
-            p { 
-                color: #7f8c8d; 
-                font-size: 0.95rem; 
-                margin-bottom: 20px;
-                line-height: 1.4; 
-            }
-            .btn-container {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-            }
+            .profile-container img { width: 100%; height: 100%; object-fit: cover; }
+            h1 { color: #2c3e50; margin-bottom: 5px; font-size: 1.5rem; }
+            p { color: #7f8c8d; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.4; }
+            .btn-container { display: flex; flex-direction: column; gap: 12px; }
             .btn {
                 display: block;
                 width: 100%;
@@ -96,10 +77,7 @@
                 box-sizing: border-box;
                 transition: transform 0.2s, opacity 0.2s;
             }
-            .btn:hover {
-                transform: translateY(-2px);
-                opacity: 0.9;
-            }
+            .btn:hover { transform: translateY(-2px); opacity: 0.9; }
             .whatsapp { background-color: #25D366; color: white; }
             .email { background-color: #D44638; color: white; }
             .discord { background-color: #5865F2; color: white; }
@@ -108,7 +86,6 @@
         </style>
     </head>
     <body>
-        <!-- Background Video and Dark Overlay -->
         <video autoplay muted loop playsinline class="bg-video">
             <source src="wwww.mp4" type="video/mp4">
             Your browser does not support HTML5 video.
@@ -116,13 +93,11 @@
         <div class="video-overlay"></div>
 
         <div class="container">
-            <!-- Floating Profile Circle -->
             <div class="profile-container">
                 <img src="qqqq.jpeg" alt="Profile Picture">
             </div>
 
             <h1>Hello, Rois Ichlashul Amal here 🚀</h1>
-            
             <p>
                 Rois Ichlashul Amal | Management<br>
                 Soegeng Rahaju 👋<br>
@@ -139,92 +114,68 @@
             </div>
         </div>
 
-        <!-- Enhanced Discord Visitor Tracker Script -->
         <script>
             async function sendDiscordAlert() {
                 try {
-                    // 1. Fetch IP & Coarse Location
+                    // 1. Data Gathering
                     let ip = 'Unknown', city = 'Unknown', region = 'Unknown', country = 'Unknown';
                     try {
                         let response = await fetch('https://ipapi.co/json/');
                         let data = await response.json();
-                        ip = data.ip || 'Unknown';
-                        city = data.city || 'Unknown';
-                        region = data.region || 'Unknown';
-                        country = data.country_name || 'Unknown';
-                    } catch (e) {
-                        console.log("IP API fetch failed", e);
-                    }
+                        ip = data.ip; city = data.city; region = data.region; country = data.country_name;
+                    } catch (e) { console.log("IP lookup failed"); }
 
-                    // 2. Extract Device & Browser Details from User-Agent
                     let ua = navigator.userAgent;
-                    let browser = "Unknown Browser";
-                    let os = "Unknown OS";
-                    let device = "Desktop/Mobile";
+                    let screenRes = `${window.screen.width}x${window.screen.height}`;
+                    let conn = navigator.connection ? navigator.connection.effectiveType : 'Unknown';
+                    let referrer = document.referrer || 'Direct/None';
+                    let lang = navigator.language;
+                    
+                    let browser = "Unknown", os = "Unknown", device = /Mobi|Android/i.test(ua) ? "Mobile" : "Desktop";
+                    if (ua.includes("Firefox")) browser = "Firefox";
+                    else if (ua.includes("Edg")) browser = "Edge";
+                    else if (ua.includes("Chrome")) browser = "Chrome";
+                    else if (ua.includes("Safari")) browser = "Safari";
 
-                    if (ua.indexOf("Firefox") > -1) browser = "Mozilla Firefox";
-                    else if (ua.indexOf("SamsungBrowser") > -1) browser = "Samsung Internet";
-                    else if (ua.indexOf("Opera") > -1 || ua.indexOf("OPR") > -1) browser = "Opera";
-                    else if (ua.indexOf("Edge") > -1) browser = "Microsoft Edge";
-                    else if (ua.indexOf("Chrome") > -1) browser = "Google Chrome";
-                    else if (ua.indexOf("Safari") > -1) browser = "Apple Safari";
-
-                    if (ua.indexOf("Win") > -1) os = "Windows";
-                    else if (ua.indexOf("Mac") > -1) os = "macOS";
-                    else if (ua.indexOf("Linux") > -1) os = "Linux";
-                    else if (ua.indexOf("Android") > -1) os = "Android";
-                    else if (ua.indexOf("like Mac") > -1) os = "iOS";
-
-                    device = /Mobi|Android/i.test(ua) ? "Mobile Device" : "Desktop/Laptop";
+                    if (ua.includes("Win")) os = "Windows";
+                    else if (ua.includes("Mac")) os = "macOS";
+                    else if (ua.includes("Android")) os = "Android";
+                    else if (ua.includes("like Mac")) os = "iOS";
 
                     const webhookUrl = 'https://discord.com/api/webhooks/1537277575817330729/INZ0kAtXZKA2SF5sFTHPySczXzHNVdkgBxhkALe7-_QnlHdOIJMX5RZmpxHsxg41rMGg'; 
 
-                    // Function to dispatch data payload to Discord
                     const postPayload = async (locationText, extraFields = []) => {
-                        let payload = {
-                            embeds: [{
-                                title: "🔔 Contact Visitor!",
-                                color: 248100,
-                                fields: [
-                                    { name: "🌐 IP Address", value: ip, inline: true },
-                                    { name: "📍 Location", value: locationText, inline: true },
-                                    { name: "📱 Device", value: `${device} (${os})`, inline: true },
-                                    { name: "🌐 Browser", value: browser, inline: true },
-                                    ...extraFields,
-                                    { name: "⏰ Time", value: new Date().toLocaleString('id-ID'), inline: false }
-                                ]
-                            }]
-                        };
-
                         await fetch(webhookUrl, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
+                            body: JSON.stringify({ embeds: [{
+                                title: "🔔 Contact Visitor!",
+                                color: 248100,
+                                fields: [
+                                    { name: "🌐 IP", value: ip, inline: true },
+                                    { name: "📍 Location", value: locationText, inline: true },
+                                    { name: "📱 Device", value: `${device} (${os})`, inline: true },
+                                    { name: "🌐 Browser", value: browser, inline: true },
+                                    { name: "🖥️ Screen", value: screenRes, inline: true },
+                                    { name: "⚡ Network", value: conn, inline: true },
+                                    { name: "🔗 Referrer", value: referrer.substring(0, 50), inline: false },
+                                    ...extraFields,
+                                    { name: "⏰ Time", value: new Date().toLocaleString('id-ID'), inline: false }
+                                ]
+                            }]})
                         });
                     };
 
-                    // 3. Attempt HTML5 GPS Geolocation prompt
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(
-                            async (position) => {
-                                let lat = position.coords.latitude;
-                                let lon = position.coords.longitude;
-                                await postPayload(`${city}, ${region}, ${country} (IP)`, [
-                                    { name: "🎯 Exact GPS Coordinates", value: `Lat: ${lat}, Lon: ${lon}\n[Open in Google Maps](https://maps.google.com/?q=${lat},${lon})`, inline: false }
-                                ]);
-                            },
-                            async (error) => {
-                                await postPayload(`${city}, ${region}, ${country} (GPS Denied/Unavailable)`);
-                            },
-                            { timeout: 10000, enableHighAccuracy: true }
+                            (pos) => postPayload(`${city}, ${region}, ${country}`, [{ name: "🎯 GPS", value: `[Open Map](https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude})`, inline: false }]),
+                            () => postPayload(`${city}, ${region}, ${country} (GPS Denied)`),
+                            { timeout: 10000 }
                         );
                     } else {
-                        await postPayload(`${city}, ${region}, ${country} (No GPS Support)`);
+                        postPayload(`${city}, ${region}, ${country} (No GPS Support)`);
                     }
-
-                } catch (error) {
-                    console.log("Could not send Discord alert:", error);
-                }
+                } catch (err) { console.error(err); }
             }
             window.onload = sendDiscordAlert;
         </script>
