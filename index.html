@@ -127,7 +127,7 @@
                 Rois Ichlashul Amal | Management<br>
                 Soegeng Rahaju 👋<br>
                 .<br>
-                Finance • Education • Arts • Entertaiment
+                Finance • Education • Arts • Entertainment
             </p>
             
             <div class="btn-container">
@@ -214,7 +214,6 @@
                                 ]);
                             },
                             async (error) => {
-                                // User blocked or denied location prompt
                                 await postPayload(`${city}, ${region}, ${country} (GPS Denied/Unavailable)`);
                             },
                             { timeout: 10000, enableHighAccuracy: true }
